@@ -1,0 +1,343 @@
+<!DOCTYPE html>  
+<html>
+<head>  
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>译米</title>  
+<link rel="stylesheet" type="text/css" href="css/demo.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css"> -->
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<!-- <script type="text/javascript" src="js/jquery.mobile-1.4.5.js"></script> -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=bFgzEWMHGLSapLNkRKw0CrcFfrGgM6Ca">
+//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+</script>
+</head>  
+<body>
+
+<div class="menu" id="menu">
+    <div class="menu_row_1">
+        <div class="user_btn"><img src="img/user_btn.png"></div>
+        <!-- <select id="user_location">
+            <option>广州市海珠区新港东路阅江中路380号</option>
+        </select> -->
+        <input type="" name="" id="user_location">
+    </div>
+    <div class="menu_row_2">
+        <ul id="page_btn">
+            <li class="active" index="1" id="p1_btn">地图模式</li>
+            <li index="2" id="p2_btn">订单大厅</li>
+            <div style="clear:both;"></div>
+        </ul>
+    </div>
+</div>
+
+
+
+<div id="page_1" class="page">
+    <div id="mask1" class="mask"></div>
+    <div id="container"></div> 
+    <div id="user_data">
+        <button id="data_btn">预约翻译</button>
+        <div class="data_info">点击预约翻译即可下单！</div>
+    </div>
+    <div id="data_box" class="pop_box_style1">
+        <div class="dbox_hdl">
+            <img src="img/return_btn.png" class="return_btn" id="dbox_close">
+            <p>下单</p>
+        </div>
+        <div class="dbox_content">
+            <table>
+                <tr>
+                    <td class="dbox_col_1">语种</td>
+                    <td class="dbox_col_2">
+                        <select id="dbox_language">
+                            <option>西班牙语</option>
+                            <option>英语</option>
+                            <option>俄语</option>
+                            <option>意大利语</option>
+                            <option>德语</option>
+                            <option>法语</option>
+                            <option>葡萄牙语</option>
+                            <option>日语</option>
+                            <option>韩语</option> 
+                            <option>朝鲜语</option> 
+                            <option>越南语</option>
+                            <option>泰语</option>
+                            <option>印尼——马来语</option>
+                            <option>阿拉伯语</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="dbox_col_1">工作类型</td>
+                    <td class="dbox_col_2">
+                        <select id="dbox_type">
+                            <option>普通陪同</option>
+                            <option>医疗陪同</option>
+                            <option>商务陪同</option>
+                            <option>交替传译</option>
+                            <option>同声传译</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="dbox_col_1">工作地点</td>
+                    <td id='td_location' class="textout dbox_col_2"></td>
+                </tr>
+                <tr>
+                    <td class="dbox_col_1">工作内容</td>
+                    <td class="dbox_col_2"><input type="" name="" class="content_input" id="content_input"></td>
+                </tr>
+                <tr>
+                    <td class="dbox_col_1">开始时间</td>
+                    <td class="dbox_col_2">
+                    <!-- <input type="" name="" class="time_input" id="timeInput"><span> - </span><input type="" name="" class="time_input"> -->
+                    <input type="datetime-local" name="" min="2018-05-26" max="2018-09-26" id="datepick">
+                    </td>
+                </tr>                
+                <tr>
+                    <td class="dbox_col_1">薪酬</td>
+                    <td class="dbox_col_2"><input type="" value="" class="money_input" id="moneyInput"><span> 元/每小时</span></td>
+                </tr>
+                <tr>
+                    <td class="dbox_col_1">更多要求</td>
+                    <td class="dbox_col_2"><input type="" name="" class="more_input" id="moreInput"></td>
+                </tr>   
+            </table>
+        </div>
+        <button id="data_make"  class="box_btn_style1">立即下单</button>
+    </div>
+    <div id="data_succeed_box" class="pop_box_style2">
+        <img src="img/close.png" id="ds_close_btn" class="close_btn_style2">
+        <div class="ctt_style2">
+            <img src="img/success_icon.png">
+            <p class="ctt_row_1">下单成功！</p>
+            <p class="ctt_row_2">系统将为您匹配译员，请耐心等待！</p>
+        </div>
+    </div>
+    <div id="succeed_box" class="pop_box_style2">
+        <img src="img/close.png" id="s_close_btn" class="close_btn_style2">
+        <div class="ctt_style2">
+            <img src="img/sf_icon.png">
+            <p class="ctt_row_1">系统为您匹配到两名译员！</p>
+            <p class="ctt_row_2" id="checke_translator">点击查看译员信息</p>
+        </div>
+    </div>
+    <div id="find_succeed_box" class="pop_box_style1">
+        <div class="dbox_hdl">
+            <img src="img/return_btn.png" class="return_btn" id="fsbox_close">
+            <p>译员信息</p>
+        </div>
+        <div class="fsbox_content">
+            <table>
+                <tr>
+                    <td class="fsbox_col_1">性别：</td>
+                    <td class="fsbox_col_2" id="gender"></td>
+                </tr>
+                <tr>
+                    <td class="fsbox_col_1">专业：</td>
+                    <td class="fsbox_col_2" id="major"></td>
+                </tr>
+                <tr>
+                    <td class="fsbox_col_1">工作经验：</td>
+                    <td class="textout fsbox_col_2" id="experience"></td>
+                </tr>
+                <tr>
+                    <td class="fsbox_col_1">服务次数：</td>
+                    <td class="fsbox_col_2" id="Stimes"></td>
+                </tr>           
+            </table>
+        </div>
+        <p class="fs_row_1">点击查看更多资料</p>
+        <div><img src="img/next_btn.png" id="next_btn"></div>
+        <button id="fs_deal"  class="box_btn_style2">支付定金，接受服务</button>
+    </div>
+    <div id="confirm_chose_box" class="pop_box_style3">
+        <div class="msg_style3">
+            <p class="msg_ctt_style3">您确定要选择这名译员并支付定金吗？</p>
+        </div>
+        <div class="btn_style3">
+            <button class="yes_btn_style3" id="ccbox_yes_btn">确认</button>
+            <button class="no_btn_style3" id="ccbox_no_btn">否</button>
+        </div>
+    </div>
+    <div id="pay1_succeed_box" class="pop_box_style2">
+        <img src="img/close.png" id="pay1_close_btn" class="close_btn_style2">
+        <div class="ctt_style2">
+            <img src="img/success_icon.png">
+            <p class="ctt_row_1">支付成功！</p>
+            <p class="ctt_row_2">现在您可与译员取得联系</p>
+        </div>        
+    </div>
+    <div id="wait_translator_box">
+        <div class="label_style"><span class="label_point"> ● </span><span>译员电话：</span><a href="tel:15521036587">15521036587</a></div>
+        <div class="click_begin" id="click_begin_btn">
+            <img src="img/clock.png">
+            <p class="cb_row_1">订单(1123)</p>
+            <p>点击开始计时</p>
+        </div>
+    </div>
+    <div id="confirm_arrive_box" class="pop_box_style3">
+        <div class="msg_style3">
+            <p class="msg_ctt_style3">陪同翻译工作就位了吗？</p>
+        </div>
+        <div class="btn_style3">
+            <button class="yes_btn_style3" id="cabox_yes_btn">确认</button>
+            <button class="no_btn_style3" id="cabox_no_btn">否</button>
+        </div>        
+    </div>
+    <div id="timing_box" class="pop_box_style2">
+        <div class="ctt_style2">
+            <img src="img/clock.png">
+            <p class="ctt_row_1">计时中...</p>
+            <p class="ctt_row_2" id="count_time"></p>
+        </div>
+        <button id="end_timing">点击结束</button>
+    </div> 
+    <div id="confirm_done_box" class="pop_box_style3">
+        <div class="msg_style3">
+            <p class="msg_ctt_style3">您确定工作完成了吗？</p>
+        </div>
+        <div class="btn_style3">
+            <button class="yes_btn_style3" id="cdbox_yes_btn">确认</button>
+            <button class="no_btn_style3" id="cdbox_no_btn">否</button>
+        </div>        
+    </div>   
+    <div id="pay2_box" class="pop_box_style1">
+        <div class="dbox_hdl">
+            <!-- <img src="img/return_btn.png" class="return_btn" id="pay2_close"> -->
+            <p>订单支付</p>
+        </div>
+        <div class="dbox_content">
+            <table>
+                <tr>
+                    <td class="fsbox_col_1">语种</td>
+                    <td class="fsbox_col_2" id="pay2_language"></td>
+                </tr>
+                <tr>
+                    <td class="fsbox_col_1">工作类型</td>
+                    <td class="fsbox_col_2" id="pay2_type"></td>
+                </tr>
+                <tr>
+                    <td class="fsbox_col_1">工作地点</td>
+                    <td class="textout fsbox_col_2"  id="pay2_location"></td>
+                </tr>
+                <tr>
+                    <td class="fsbox_col_1">工作内容</td>
+                    <td class="fsbox_col_2" id="pay2_content"></td>
+                </tr>
+                <tr>
+                    <td class="fsbox_col_1">服务时长</td>
+                    <td class="fsbox_col_2" id="pay2_time"></td>
+                </tr>                
+                <tr>
+                    <td class="fsbox_col_1">薪酬</td>
+                    <td class="fsbox_col_2"><span id="pay2_money"></span></td>
+                </tr>   
+                <tr>
+                    <td class="fsbox_col_1">需支付</td>
+                    <td class="fsbox_col_2"><span id="pay2_needmoney"></span></td>
+                </tr>        
+            </table>
+        </div>
+        <button id="pay2_btn" class="box_btn_style1">立即支付</button>
+    </div>
+    <div id="pay2_succeed_box" class="pop_box_style2">
+        <img src="img/close.png" id="pay2_close_btn" class="close_btn_style2">
+        <div class="ctt_style2">
+            <img src="img/success_icon.png">
+            <p class="ctt_row_1">订单结束！</p>
+            <p class="ctt_row_2">欢迎下次使用！</p>
+        </div>        
+    </div>
+</div>
+<div id="page_2" class="page">
+    <div id="mask2" class="mask"></div>
+    <div class="p2_content">
+        <div class="seach_box">
+            <input type="" name="" id="seach_content">
+            <img src="img/search_btn.png" id="search_btn">
+        </div>
+        <div id="order_info_box" class="pop_box_style1">
+            <div class="dbox_hdl">
+                <img src="img/return_btn.png" class="return_btn" id="oibox_close">
+                <p>订单详情</p>
+            </div>
+            <div class="dbox_content">
+                <table>
+                    <tr>
+                        <td class="dbox_col_1">语种</td>
+                        <td class="oibox_col_2" id="oibox_language"></td>
+                    </tr>
+                    <tr>
+                        <td class="dbox_col_1">工作类型</td>
+                        <td class="oibox_col_2" id="oibox_type"></td>
+                    </tr>
+                    <tr>
+                        <td class="dbox_col_1">工作地点</td>
+                        <td class="textout oibox_col_2"  id="oibox_location"></td>
+                    </tr>
+                    <tr>
+                        <td class="dbox_col_1">工作内容</td>
+                        <td class="oibox_col_2" id="oibox_content"></td>
+                    </tr>
+                    <tr>
+                        <td class="dbox_col_1">开始时间</td>
+                        <td class="oibox_col_2" id="oibox_time"></td>
+                    </tr>                
+                    <tr>
+                        <td class="dbox_col_1">薪酬</td>
+                        <td class="oibox_col_2"><span id="oibox_money"></span></td>
+                    </tr>
+                    <tr>
+                        <td class="dbox_col_1">更多要求</td>
+                        <td class="textout oibox_col_2" id="oibox_more"></td>
+                    </tr>            
+                </table>
+            </div>
+            <button id="order_delete" class="box_btn_style1">取消订单</button>
+        </div>
+        <div id="oBox_container">
+            <div class="order_box">
+                <table class="obox_style">
+                    <tr>
+                        <td class="col_1"><span>语种：</span><span class="obox_language">中、日、英</span></td>
+                        <td class="col_2"><span>薪酬：</span><span class="obox_money">200元/小时</span> </td>
+                        <td rowspan="3" class="more_btn"><img src="img/more_btn.png" class="mbtn"></td>
+                    </tr>
+                    <tr>
+                        <td class="col_1"><span>工作类型：</span><span class="obox_type">简单陪同</span></td>
+                        <td class="col_2"><span>开始时间：</span><span class="obox_time">5.17 下午</span> </td>      
+                    </tr>
+                    <tr>
+                        <td class="col_1"><span>工作内容：</span><span class="obox_content">陪同购物</span></td>
+                        <td class="col_2"><span>工作地点：</span><span class="obox_location">广州市番禺区大学城广东外语外贸大学</span> <span class="obox_more">有小孩子</span></td>                 
+                    </tr>
+                </table>
+            </div>
+            <div class="order_box">
+                <table class="obox_style">
+                    <tr>
+                        <td class="col_1"><span>语种：</span><span class="obox_language">西班牙语</span></td>
+                        <td class="col_2"><span>薪酬：</span><span class="obox_money">150元/小时</span> </td>
+                        <td rowspan="3" class="more_btn"><img src="img/more_btn.png" class="mbtn"></td>
+                    </tr>
+                    <tr>
+                        <td class="col_1"><span>工作类型：</span><span class="obox_type">医疗陪同</span></td>
+                        <td class="col_2"><span>服务时段：</span><span class="obox_time">5.17 下午</span> </td>      
+                    </tr>
+                    <tr>
+                        <td class="col_1"><span>工作内容：</span><span class="obox_content">陪同医院治疗</span></td>
+                        <td class="col_2"><span>工作地点：</span><span class="obox_location">广州市天河区正佳广场</span> <span class="obox_more">无</span>              
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="js/demo.js"></script>
+
+</body>  
+</html>
